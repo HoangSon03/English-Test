@@ -1,0 +1,579 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="module_XemLuyenTap_Listening_A2.aspx.cs" Inherits="admin_page_module_function_module_CauHoiLuyenTap_module_XemLuyenTap_Listening_A2" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <!-- Meta -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="SITE KEYWORDS HERE" />
+    <meta name="description" content="" />
+    <meta name='copyright' content='' />
+    <%-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />--%>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Title -->
+    <title>Trắc nghiệm Online</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../../images/logo_mamnon.png" />
+    <!-- Web Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet" />
+    <!-- Font IcoFont CSS -->
+    <link href="/css/icofont.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css" />
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="/css/animate.min.css" />
+    <!-- Slick Nav CSS -->
+    <link rel="stylesheet" href="/css/slicknav.min.css" />
+    <%--Trắc Nghiệm--%>
+    <link href="/css/css_tracnghiem/tracnghiem.css" rel="stylesheet" />
+    <script src="../../../admin_js/sweetalert.min.js"></script>
+    <!-- Learedu Stylesheet -->
+    <%--<link href="css/css_trangchu/trangchu.css" rel="stylesheet" />--%>
+    <!-- Learedu Color -->
+    <link rel="stylesheet" href="/css/color3.css" />
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <link href="../../css/Loading.css" rel="stylesheet" />
+
+    <style>
+        /*.Part {*/
+        /*text-align: center !important;
+        display: inline-block !important;*/
+        /*}*/
+        body {
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer */
+            -khtml-user-select: none; /* KHTML browsers (e.g. Konqueror) */
+            -webkit-user-select: none; /* Chrome, Safari, and Opera */
+            -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+        }
+
+        .tracnghiem__heading {
+            font-weight: 900;
+        }
+
+        .col-2dot4,
+        .col-sm-2dot4,
+        .col-md-2dot4,
+        .col-lg-2dot4,
+        .col-xl-2dot4 {
+            width: 100%;
+            min-height: 1px;
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+
+        .col-2dot4 {
+            -webkit-box-flex: 0;
+            -ms-flex: 0 0 20%;
+            flex: 0 0 20%;
+            max-width: 20%;
+        }
+
+        @media (min-width: 540px) {
+            .col-sm-2dot4 {
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 20%;
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        @media (min-width: 720px) {
+            .col-md-2dot4 {
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 20%;
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        @media (min-width: 960px) {
+            .col-lg-2dot4 {
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 20%;
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        @media (min-width: 1140px) {
+            .col-xl-2dot4 {
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 20%;
+                flex: 0 0 20%;
+                max-width: 20%;
+            }
+        }
+
+        .Answer {
+            text-align: center;
+            margin-top: 2%;
+        }
+
+        .Part_img {
+            margin: auto;
+        }
+
+        .Part_audio {
+            margin-left: 15%;
+        }
+
+        .Answer-input {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <script>
+            function checkValue(ques_id, value, id_check) {
+                //var getValue = $("input[name='check_" + ques_id + "']:checked").val();
+                $("input[name='value_" + ques_id + "']").val(value);
+                $("input[name='ID_" + ques_id + "']").val(id_check);
+            }
+            var count = 0;
+            //fun check trắc nghiệm
+            function checkTracNghiem() {
+                var getValues = $("input[name*='value_']").map(function () {
+                    return $(this).val();
+                }).get();
+                var getId = $("input[name*='ID_']").map(function () {
+                    return $(this).val();
+                }).get();
+
+                var getQuestionID = $("input[name='txtQuestionID']").map(function () {
+                    return $(this).val();
+                }).get();
+                document.getElementById('<%=txtChecked.ClientID%>').value = getId;
+                document.getElementById('<%=txtIDQuestion.ClientID%>').value = getQuestionID;
+                document.getElementById('<%=txtValueChecked.ClientID%>').value = getValues;
+                for (var index = 0; index < getValues.length; index++) {
+                    if (getValues[index] == "True") {
+                        count++;
+                    }
+                }
+                var getValue = document.getElementById('<%=txtValueChecked.ClientID%>').value.split(',');
+                var getId = document.getElementById('<%=txtChecked.ClientID%>').value.split(',');
+                //debugger;
+                for (var index = 0; index < getId.length; index++) {
+                    $("#test" + getId[index] + "").attr('checked', 'checked');
+
+                    if (getValue[index] == "True") {
+                        $("#test" + getId[index] + "").next().css("color", "green");
+                        $("#test" + getId[index] + "").next().toggleClass('checked__rdoo');
+
+                    } else {
+                        $("#test" + getId[index] + "").next().css("color", "red");
+                        $("#test" + getId[index] + "").next().toggleClass('checked__rdo');
+                    }
+                }
+            }
+            //check part 2 (tự luận không phân biệt chữ hoa thường)
+            function checkPart2() {
+                var getDapAn = $("input[name*='part2_']").map(function () {
+                    return $(this);
+                }).get();
+                let arrDung = [];
+                for (var index = 0; index < getDapAn.length; index++) {
+                    var dapandung = getDapAn[index].data("dapan").toUpperCase().split('/ ');
+                    var giatrinhapvao = getDapAn[index].val().trim().toUpperCase();
+                    if (dapandung.includes(giatrinhapvao) == true) {
+                        count++;
+                        getDapAn[index].css({
+                            "color": "green"
+                        });
+                        arrDung.push("true");
+                    } else {
+                        getDapAn[index].css({
+                            "color": "red"
+                        });
+                        arrDung.push("false");
+                    }
+                }
+                var getValues = $("input[name*='part2_']").map(function () {
+                    return $(this).val();
+                }).get();
+                let arr_id = $("input[name*='part2_']").map(function () {
+                    return $(this).data("id");
+                }).get();
+                document.getElementById('<%=txtValuePart2.ClientID%>').value = getValues.toString();
+                document.getElementById('<%=txtDungSai.ClientID%>').value = arrDung.toString();
+                document.getElementById('<%=txtCauHoiPart2.ClientID%>').value = arr_id.toString();
+                console.log(count);
+            }
+            // check part 5 (tự luận nhập đúng hoa thường)
+            function checkPart5() {
+                var getValues = $("input[name*='part5_']").map(function () {
+                    return $(this);
+                }).get();
+                let arr = [];
+                for (var index = 0; index < getValues.length; index++) {
+                    var dapandung = getValues[index].data("dapan");
+                    var giatrinhapvap = getValues[index].val();
+                    if (dapandung == giatrinhapvap) {
+                        count++;
+                        getValues[index].css({
+                            "color": "green"
+                        });
+                        arr.push("true");
+                    } else {
+                        getValues[index].css({
+                            "color": "red"
+                        });
+                        arr.push("false");
+                    }
+                }
+                let arr_id = $("input[name*='part5_']").map(function () {
+                    return $(this).data("id");
+                }).get();
+                let arr_value = $("input[name*='part5_']").map(function () {
+                    return $(this).val();
+                }).get();
+                document.getElementById('<%=txtValuePart5.ClientID%>').value = arr_value.toString();
+                document.getElementById('<%=txtCauHoiPart5.ClientID%>').value = arr_id.toString();
+                document.getElementById('<%=txtDungSaiPart5.ClientID%>').value = arr.toString();
+                console.log(count);
+            }
+            function checkValueFinish() {
+                checkTracNghiem();
+                checkPart2();
+                checkPart5();
+                document.getElementById('<%=txtSoCauDung.ClientID%>').value = count;
+
+            }
+            <%--function confirmDel() {
+                swal("Do you really want to submit your answer ?",
+                    "If you agree, the answer will not be changed.",
+                    "warning",
+                    {
+                        buttons: true,
+                        successMode: true
+                    }).then(function (value) {
+                        if (value == true) {
+                            checkValueFinish();
+                            DisplayLoadingIcon();
+                            var xoa = document.getElementById('<%=btnNopBai.ClientID%>');
+                            xoa.click();
+                        }
+                    });
+            }--%>
+        </script>
+        <script>
+            function DisplayLoadingIcon() {
+                $("#img-loading-icon").show();
+            }
+            function HiddenLoadingIcon() {
+                $("#img-loading-icon").hide();
+            }
+        </script>
+        <div class="loading" id="img-loading-icon" style="display: none">
+            <div class="loading">Loading&#8230;</div>
+        </div>
+        <input type="text" id="txtPhutHiden" runat="server" hidden="hidden" />
+        <input type="text" id="txtTitle" runat="server" hidden="hidden" />
+        <a href="#" hidden="hidden" runat="server" id="btnCheckCookie" onserverclick="btnCheckCookie_ServerClick">check</a>
+        <a href="#" hidden="hidden" runat="server" id="btnClose" onserverclick="btnClose_ServerClick">Close</a>
+        <asp:ScriptManager runat="server" />
+        <a class="button pink--md serif round glass btn__pre" id="btnBack" runat="server" onserverclick="btnBack_ServerClick">Back</a>
+        <div class="main__tracnghiem" id="popupBlur">
+            <%--<a href="javascript:void(0)" class="button pink serif round glass" id="check__none" onclick="checkCookie()">Start</a>--%>
+            <div class="popupPoint" id="popupPoint">
+                <div class="popup__content">
+                    <div class="popup__heading">
+                        <div class="popup__point">
+                            <div class="point">
+                                <%--<span id="pointStart">0</span>/<span id="pointFinish"><%=count%></span>&nbsp;câu đúng--%>
+                                <%--<span id="pointStart"></span>/<span id="pointFinish"><%=count%></span>&nbsp;--%>
+                                <%--                                <span id="pointStart"></span>/<span id="pointFinish"><%=count%></span>&nbsp;--%>
+                                <%--<span id="pointStart">0</span>/<span id="pointFinish">25</span>&nbsp;câu đúng--%>
+                            </div>
+                            <div class="popup__times">
+                            </div>
+                            <i class="fa fa-times popup__times" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="popup__body">
+                        <div class="popup__inner">
+                            <img class="point__img" src="/images/English/list/success.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="baitap__content baitap__show">
+                <asp:UpdatePanel runat="server">
+                    <ContentTemplate>
+                        <div class="container">
+                            <div style="display: none">
+                                <input type="text" value="" id="txtSoCauDung" runat="server" placeholder="số câu đúng" />
+                                <input type="text" name="txtChecked" value="" id="txtChecked" runat="server" placeholder="checked" />
+                                <input type="text" value="" id="txtIDQuestion" runat="server" placeholder="id c^^au hỏi" />
+                                <input type="text" name="txtValue" value="" id="txtValueChecked" runat="server" placeholder="value" />
+                                giá trị input part 2:
+                                <input type="text" value="" id="txtValuePart2" runat="server" placeholder="checked" />
+                                giá trị id câu hỏi part 2:
+                                <input type="text" value="" id="txtCauHoiPart2" runat="server" placeholder="checked" />
+                                giá trị đúng sai part 2
+                                <input type="text" value="" id="txtDungSai" runat="server" placeholder="checked" />
+                                giá trị input nhập vào part 5:
+                                <input type="text" value="" id="txtValuePart5" runat="server" placeholder="checked" />
+                                giá trị câu hỏi part 5:
+                                <input type="text" value="" id="txtCauHoiPart5" runat="server" placeholder="checked" />
+                                giá trị đúng sai part 5
+                                <input type="text" value="" id="txtDungSaiPart5" runat="server" placeholder="checked" />
+
+                            </div>
+                            <div class="tracnghiem__heading-box">
+                                <div class="content__heading">
+                                    <h3 class="tracnghiem__heading" id="title"></h3>
+                                </div>
+                            </div>
+                            <%--part 1--%>
+                            <div class="Part">
+                                <div>
+                                    <p class="Part_header">Part 1:</p>
+                                    <p>
+                                        Questions 1-5
+                                        For each question, choose the correct answer.
+                                    </p>
+                                    <asp:Repeater ID="rpAmThanhPart1" runat="server">
+                                        <ItemTemplate>
+                                            <audio src="<%#Eval("questionbig_mp3") %>" controls="controls" />
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </div>
+                                <div>
+                                    <asp:Repeater ID="rpCauHoiPart1" runat="server" OnItemDataBound="rpCauHoiPart1_ItemDataBound">
+                                        <ItemTemplate>
+                                            <fieldset class="tracnghiem__content">
+                                                <legend class="tracnghiem__legend">Câu <%=STT++ %></legend>
+                                                <div class="tracnghiem__content-box">
+                                                    <h4 class="tracnghiem__question"><%#Eval("noidungcauhoi") %>
+                                                    </h4>
+                                                    <input type="text" name="txtQuestionID" value="<%#Eval("question_id") %>" hidden="hidden" />
+                                                    <div class="tracnghiem__answer">
+                                                        <div class="tracnghiem__box col-12 row">
+                                                            <asp:Repeater ID="rpCauTraLoi" runat="server">
+                                                                <ItemTemplate>
+                                                                    <input type="radio" id="test<%#Eval("answer_id") %>" value="<%#Eval("answer_true") %>" onclick="checkValue(<%#Eval("question_id") %>, this.value, <%#Eval("answer_id") %>)" name="check_<%#Eval("question_id") %>" />
+                                                                    <label class="tracnghiem-title__answer col-4" for="test<%#Eval("answer_id") %>"><%#Eval("answer_content") %></label>
+                                                                </ItemTemplate>
+                                                            </asp:Repeater>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div style="display: none;">
+                                                    <input type="text" name="value_<%#Eval("question_id") %>" />
+                                                    <input type="text" name="ID_<%#Eval("question_id") %>" />
+                                                </div>
+                                            </fieldset>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </div>
+                                <%--part 2--%>
+                                <p class="Part_header">Part 2:</p>
+                                <div id="div_Part2_De2" runat="server">
+                                    <asp:Repeater ID="rpCauHoiLonPart2" runat="server">
+                                        <ItemTemplate>
+                                            <audio src="<%#Eval("questionbig_mp3") %>" controls="controls"></audio>
+                                            <br />
+                                            <img src="<%#Eval("QuestionBig_content") %>" />
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <div class="Answer col-12 row">
+                                        <asp:Repeater ID="rpCauHoiPart2" runat="server" OnItemDataBound="rpCauHoiPart2_ItemDataBound1">
+                                            <ItemTemplate>
+                                                <div class="col-6 col-md-4 col-lg-2">
+                                                    <span><%#Eval("noidungcauhoi") %>:</span>
+                                                    <asp:Repeater ID="rpCauTraLoiPart2" runat="server">
+                                                        <ItemTemplate>
+                                                            <input data-dapan="<%#Eval("answer_content") %>" data-id="<%#Eval("question_id") %>" class="form-control" type="text" name="part2_<%=count++%>" autocomplete="off" />
+                                                        </ItemTemplate>
+                                                    </asp:Repeater>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </div>
+                                </div>
+                                <%--part 3  -4--%>
+                                <asp:Repeater ID="rpCauHoiLon" runat="server" OnItemDataBound="rpCauHoiLon_ItemDataBound">
+                                    <ItemTemplate>
+                                        <div>
+                                            <p class="Part_header">Part <%=STT_Part++ %>:</p>
+                                            <p>For each question, choose the correct answer.</p>
+                                            <div>
+                                                <audio src="<%#Eval("questionbig_mp3") %>" controls="controls" />
+                                            </div>
+                                        </div>
+                                        <asp:Repeater ID="rpCauHoi" runat="server" OnItemDataBound="rpCauHoi_ItemDataBound">
+                                            <ItemTemplate>
+                                                <legend class="tracnghiem__legend">Câu <%=STT_Part3++ %></legend>
+                                                <div class="tracnghiem__content-box">
+                                                    <h4 class="tracnghiem__question"><%#Eval("noidungcauhoi") %>
+                                                    </h4>
+                                                    <input type="text" name="txtQuestionID" value="<%#Eval("question_id") %>" hidden="hidden" />
+                                                    <div class="tracnghiem__answer">
+                                                        <div class="tracnghiem__box col-12 row">
+                                                            <asp:Repeater ID="rpCauTraLoi" runat="server">
+                                                                <ItemTemplate>
+                                                                    <input type="radio" id="test<%#Eval("answer_id") %>" value="<%#Eval("answer_true") %>" onclick="checkValue(<%#Eval("question_id") %>, this.value, <%#Eval("answer_id") %>)" name="check_<%#Eval("question_id") %>" />
+                                                                    <label class="tracnghiem-title__answer col-4" for="test<%#Eval("answer_id") %>"><%#Eval("answer_content") %></label>
+                                                                </ItemTemplate>
+                                                            </asp:Repeater>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div style="display: none">
+                                                    <input type="text" name="value_<%#Eval("question_id") %>" />
+                                                    <input type="text" name="ID_<%#Eval("question_id") %>" />
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                                <%--part 5--%>
+                                <p class="Part_header">Part 5:</p>
+                                <div id="div_Part5_De1" runat="server">
+                                    <asp:Repeater ID="rpCauHoiLonPart5" runat="server">
+                                        <ItemTemplate>
+                                            <audio src="<%#Eval("questionbig_mp3") %>" controls="controls"></audio>
+                                            <br />
+                                            <img src="<%#Eval("QuestionBig_content") %>" />
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    <div class="Answer col-12 row">
+                                        <asp:Repeater ID="rpCauHoiPart5" runat="server" OnItemDataBound="rpCauHoiPart5_ItemDataBound">
+                                            <ItemTemplate>
+                                                <div class="col-6 col-md-4 col-lg-2">
+                                                    <span><%#Eval("noidungcauhoi") %>:</span>
+                                                    <asp:Repeater ID="rpCauTraLoiPart5" runat="server">
+                                                        <ItemTemplate>
+                                                            <input data-dapan="<%#Eval("answer_content") %>" data-id="<%#Eval("question_id") %>" class="form-control" type="text" name="part5_<%=count++%>" autocomplete="off" />
+                                                        </ItemTemplate>
+                                                    </asp:Repeater>
+                                                </div>
+                                            </ItemTemplate>
+                                        </asp:Repeater>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" id="btnChuyenDuyet" runat="server" onserverclick="btnChuyenDuyet_ServerClick" class="btn btn-success">Chuyển lên duyệt</a>
+                            <a href="javascript:void(0)" id="btnXacnhanhoanthanh" runat="server" onserverclick="btnXacnhanhoanthanh_ServerClick" class="btn btn-success">Xác nhận hoàn thành</a>
+                            <div class="tracnghiem__button">
+                                <a href="javascript:void(0)" runat="server" id="btnFinish" onclick="checkValueFinish();" class="button pink__finish serif round glass popup__finish">Finish</a>
+                                <asp:Button Text="text" runat="server" ID="btnNopBai" CssClass="invisible" OnClick="btnNopBai_Click" />
+                                <br />
+                            </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+        </div>
+
+    </form>
+    <style>
+        .Part {
+            background: white;
+            /*text-align: center;*/
+            border: 3px solid #b51a1a;
+            padding: 20px;
+            border-radius: 17px;
+            box-shadow: 0 7px 10px rgb(0 0 0 / 30%);
+            width: 97%;
+            background: #fff;
+            margin: 0 0 21px 0;
+            display: grid;
+        }
+
+        .Part1 {
+            background: white;
+            /* text-align: center; */
+            border: 3px solid #b51a1a;
+            padding: 20px;
+            border-radius: 17px;
+            box-shadow: 0 7px 10px rgb(0 0 0 / 30%);
+            width: 97%;
+            background: #fff;
+            margin: 0 0 21px 0;
+        }
+
+        .Part2 {
+            width: 100%;
+            border: 4px solid #b51a1a;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+            .Part2 img {
+                border-radius: 17px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .Part2 p {
+                font-size: 20px;
+                font-weight: 600;
+                padding: 0% 0% 0% 2%;
+            }
+
+        spea
+
+        .Answer {
+            width: 100%;
+            display: flex;
+            margin: 1% 0% 1% 0%;
+        }
+
+        .Part_header {
+            text-align: center;
+            font-weight: 900;
+            background: linear-gradient(to right, #ed213a, #93291e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            padding: 0 7px;
+            font-size: 30px;
+        }
+    </style>
+    <script type='text/javascript'>
+        <%-- Chống chuột phải --%>
+        var message = "NoRightClicking"; function defeatIE() { if (document.all) { (message); return false; } } function defeatNS(e) { if (document.layers || (document.getElementById && !document.all)) { if (e.which == 2 || e.which == 3) { (message); return false; } } } if (document.layers) { document.captureEvents(Event.MOUSEDOWN); document.onmousedown = defeatNS; } else { document.onmouseup = defeatNS; document.oncontextmenu = defeatIE; } document.oncontextmenu = new Function("return false")
+        <%-- Chống copy paste --%>
+        $('body').bind('copy paste', function (e) {
+            e.preventDefault(); return false;
+        });
+
+        //ngăn dùng F12, ctr-shift-i .... để inspect html
+        document.onkeydown = function (e) {
+            if (event.keyCode == 123) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        }
+
+        /*hàm ngăn copy paste test*/
+        document.addEventListener("contextmenu", function (evt) {
+            evt.preventDefault();
+        });
+
+        document.addEventListener("copy", function (evt) {
+            evt.clipboardData.setData("text/plain", "");
+            evt.preventDefault();
+        });
+    </script>
+</body>
+</html>
